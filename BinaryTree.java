@@ -222,8 +222,21 @@ public class BinaryTree {
 
     private void replaceValueHelper(Node node, int oldVal, int newVal) {
 
-        // ADD YOUR CODE HERE -- USE DEPTH FIRST SEARCH OF
-        // BINARY TREE (WHICH IS BASED ON RECURSION)
+        //safe statement checking if the tree is empty
+        if(node == null) {
+            return;
+        }
+
+        //checks if the data isnide the node is the same as the oldVal parameter. 
+        //if it is then it sets the oldVal to the newVal
+        if(node.data == oldVal) {
+            node.data = newVal;
+        }
+
+        replaceValueHelper(node.right, oldVal, newVal); //recursive method calling itslef on the right side of the tree
+        replaceValueHelper(node.left, oldVal, newVal); //recursive method calling iteself on the left side of the tree
+
+        
 
     }
 
@@ -244,10 +257,33 @@ public class BinaryTree {
 
     private int findMinHelper(Node node) {
 
-        // ADD YOUR CODE HERE -- USE DEPTH FIRST SEARCH OF
-        // BINARY TREE (WHICH IS BASED ON RECURSION)
+        // safe check to check if the tree is empty and returns the 'INTEGER.MAX_VALUE'
+        if(node == null) {
+            return Integer.MAX_VALUE;
+        }
+        
+        
+        int Lmin = findMinHelper(node.left); // recursively calculates the minimum values on the left side of the tree
+        int Rmin = findMinHelper(node.right); // recursively calculates the minimum value on the right side of the tree
+        
+        int minValue = node.data; //calculates the min value of the current node
 
-        return Integer.MAX_VALUE;
+        // if statement checking if the left min value is less than the minValue variable. if it is it replaces the minValue
+        if(Lmin < minValue) {
+            minValue = Lmin;
+        }
+
+        // if statement checking if the right min value is less than the minValue variable. if it is it replaces the minValue
+        if(Rmin < minValue) {
+            minValue = Rmin;
+        }
+
+        
+        
+
+        return minValue;
+
+        
     }
 
 
@@ -266,13 +302,24 @@ public class BinaryTree {
 
     private int nodesGTHelper(Node node, int val) {
 
-        // ADD YOUR CODE HERE -- USE DEPTH FIRST SEARCH OF
-        // BINARY TREE (WHICH IS BASED ON RECURSION)
+        //safe check to check if the tree is empty
+        if(node == null) {
+            return 0;
+        }
 
-        // RETURNING -1 IN THIS STUB, WHICH WILL FAIL ALL TESTS. REPLACE IT WITH YOUR CODE
+        int count = 0; // keeps track of the number nof nodes that contain data value larger than the parameter val
+
+        //if statement that checks if the current node value is greater than 'val' and incriments count by 1 if it is
+        if(node.data > val) {
+            count++;
+        }
+
+        count += nodesGTHelper(node.right, val); //recursive method calling itself on the right subtree
+        count += nodesGTHelper(node.left, val); //recursive method calling itself on the left subtree
+
+        return count;
 
 
-        return -1;
     }
 
 
@@ -304,13 +351,20 @@ public class BinaryTree {
 
     private int[] averageHelper(Node n) {
 
-        // ADD YOUR CODE HERE -- USE DEPTH FIRST SEARCH OF
-        // BINARY TREE (WHICH IS BASED ON RECURSION)
+       // safe statement checking if the tree is empty
+        if(n == null) {
+            return new int[]{0,0};
+        }
 
-        // RECALL, IF THE TREE IS EMPTY, RETURN 0 FOR BOTH THE SUM AND
-        // COUNT LOCATIONS IN THE RETURNED ARRAY AS SHOWN BELOW, ELSE
-        // THE 'SUM' IS RETURNED IN INDEX LOCATION 0, AND COUNT IS LOCATION 1
+        int sum = n.data; // keeping track of the sum of the nodes
+        int count = 1; // keeping track of the number of nodes in the tree
 
-        return new int[]{0, 0};
+        int[] leftSide = averageHelper(n.left); //recursive method calling itself on the left subtree
+        int[] rightSide = averageHelper(n.right); //recursive method calling itself on the right side of the tree
+
+        sum += leftSide[0] + rightSide[0]; // adds each value of the node to the sum variable
+        count += leftSide[1] + rightSide[1]; // incriments count by the number of nodes there are in the left and right subtree
+
+        return new int[]{sum, count};
     }
 }
